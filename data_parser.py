@@ -1,10 +1,14 @@
 import pandas as pd
 import re
 import os
+from pathlib import Path
+from utils import create_path
 #r before '' designates a raw string - you dont have to escape backslashes abd other special chars
 
 def parse_metafile(path):
-    if not os.path.exists(path):
+    path = create_path(path)
+
+    if not path.exists():
         print("Path doesnt exist")
         return None
 
@@ -16,7 +20,9 @@ def parse_metafile(path):
     return meta_df
 
 def parse_measures(path):
-    if not os.path.exists(path):
+    path = create_path(path)
+
+    if not path.exists():
         print("Path doesnt exist")
         return None
 
