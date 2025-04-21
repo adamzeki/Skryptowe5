@@ -5,7 +5,7 @@ from data_parser import parse_metafile
 
 def extract_dates(df):
     dates_combined = df['Data uruchomienia'].astype(str) + ' ' + df['Data zamknięcia'].astype(str)
-    pattern = r'\b\d{4}-\d{2}-\d{2}'
+    pattern = re.compile(r'\b\d{4}-\d{2}-\d{2}')
 
     all_dates = []
 
@@ -17,7 +17,7 @@ def extract_dates(df):
 
 def extract_latitude_and_longitude(df):
     lengths_combined = df['WGS84 φ N'].astype(str) + ' ' + df['WGS84 λ E'].astype(str)
-    pattern = r'\b\d+\.\d{6}\b'
+    pattern = re.compile(r'\b\d+\.\d{6}\b')
 
     all_lengths = []
 
@@ -28,7 +28,7 @@ def extract_latitude_and_longitude(df):
     return sorted(set(all_lengths))
 
 def find_two_part_names(df):
-    pattern = r'^[^-]+\s*-\s*[^-]+$'
+    pattern = re.compile(r'^[^-]+\s*-\s*[^-]+$')
 
     return find_names(df, pattern)
 
@@ -60,7 +60,7 @@ def refactor_names(df):
     return names_refactored
 
 def verify_mobility(df):
-    pattern = r'.*MOB$'
+    pattern = re.compile(r'.*MOB$')
 
     for index, row in df.iterrows():
         station_code = row['Kod stacji']
@@ -76,12 +76,12 @@ def verify_mobility(df):
 
 
 def find_three_part_names(df):
-    pattern = r'^[^-]+\s*-\s*[^-]+\s*-\s*[^-]+$'
+    pattern = re.compile(r'^[^-]+\s*-\s*[^-]+\s*-\s*[^-]+$')
 
     return find_names(df, pattern)
 
 def find_names_with_coma_and_street(df):
-    pattern = r'.*,.*\s*(ul\.|al\.)\s*\w*'
+    pattern = re.compile(r'.*,.*\s*(ul\.|al\.)\s*\w*')
 
     return find_names(df, pattern)
 
