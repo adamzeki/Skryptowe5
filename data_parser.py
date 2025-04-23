@@ -36,3 +36,6 @@ def parse_measures(path):
     return measure_df, unit
 
 #print(parse_measures('data_S5/measurements/2023_BkF(PM10)_24g.csv')[0].iloc[145, 1]) #test for 7.00E-02 - works properly
+#print(parse_measures('data_S5/measurements/2023_BkF(PM10)_24g.csv')[0])
+for i in parse_measures('data_S5/measurements/2023_BkF(PM10)_24g.csv')[0].columns:
+    print(i)
