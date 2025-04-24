@@ -1,5 +1,6 @@
 import logging
 import random
+import re
 
 from data_parser_cli import parse_measures, parse_metafile
 
@@ -65,3 +66,33 @@ def mean_and_std_generic(measure, frequency, start_date, end_date, station_code)
     print(f'Statystyki dla stacji {station_code} ({column}):')
     print(f'  Średnia: {mean:.2f} {unit}')
     print(f'  Odchylenie standardowe: {std:.2f} {unit}')
+
+
+def anomaly_detection_generic(measure, frequency, start_date, end_date, threshold):
+    df, unit = prepare_df(measure, frequency, start_date, end_date)
+
+    pattern = re.compile(r'^([^-]+)-.*')
+
+    if df is None:
+        return
+
+    wrong_readings = []
+    exceeding_thresh = []
+
+    for col in df.columns:
+        if df[col].dtype == 'float64' and (df[col] < 0).sum() + df[col].isnull().sum() > 0.2 * len(df[col]):
+            wrong_readings.append(pattern.match(col).group(1))
+
+    for col in df.columns:
+        if df[col].dtype == 'float64' and (df[col] > threshold).sum() > 0:
+            exceeding_thresh.append(pattern.match(col).group(1))
+
+    if wrong_readings:
+        print('List of stations with possible damaged sensors: ')
+        for station in wrong_readings:
+            print(station)
+
+    if exceeding_thresh:
+        print(f'List of stations which detected readings above {threshold}:')
+        for station in exceeding_thresh:
+            print(station)

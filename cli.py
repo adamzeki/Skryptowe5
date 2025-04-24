@@ -2,7 +2,7 @@ import argparse
 import logging
 import sys
 from datetime import datetime, timedelta
-from cli_utils import print_random_station_generic, mean_and_std_generic
+from cli_utils import print_random_station_generic, mean_and_std_generic, anomaly_detection_generic
 
 formatter = logging.Formatter('%(levelname)s: %(message)s')
 
@@ -26,6 +26,9 @@ def print_random_station(args):
 
 def mean_and_std(args):
     mean_and_std_generic(args.measure, args.frequency, args.start_date, args.end_date, args.station_code)
+
+def anomaly_detection(args):
+    anomaly_detection_generic(args.measure, args.frequency, args.start_date, args.end_date, args.threshold)
 
 
 def create_parser():
@@ -53,6 +56,11 @@ def create_parser():
                                          description="Oblicza średnią i odchylenie standardowe dla danej wielkości w zadanym przedziale czasowym dla danej stacji")
     parser_stats.add_argument('-s', '--station-code', type=str, required=True, help="Kod stacji")
     parser_stats.set_defaults(func=mean_and_std)
+
+    parser_anomalies = subparsers.add_parser('anomalies',
+                                             description='Wykrywa stacje z anomalnymi odczytami danej wielkości w danych ramach czasowych')
+    parser_anomalies.add_argument('-th', '--threshold', type=int, required=True, help='Próg alarmowy odczytu')
+    parser_anomalies.set_defaults(func=anomaly_detection)
 
     return parser
 
