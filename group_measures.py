@@ -22,10 +22,14 @@ def group_measurement_files_by_key(path):
 
     return grouped_files
 
-result = group_measurement_files_by_key('data_S5/measurements')
-i=0
-for key in result:
-    if i > 5:
-        break
-    i+=1
-    print(key, result[key])
+def main():
+    result = group_measurement_files_by_key('data_S5/measurements')
+    i=0
+    for key in result:
+        if i > 5:
+            break
+        i+=1
+        print(key, result[key])
+
+if __name__ == '__main__':
+    main()

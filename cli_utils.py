@@ -37,9 +37,9 @@ def print_random_station_generic(measure, frequency, start_date, end_date):
     result = df_stations[df_stations['Kod stacji'] == random_station][['Nazwa stacji', 'Adres']]
 
     if not result.empty:
-        nazwa = result.iloc[0]['Nazwa stacji']
-        adres = result.iloc[0]['Adres']
-        print(f'Wylosowana stacja:\nNazwa stacji: {nazwa}\nAdres: {adres}\nMierzona wielkość: {measure}')
+        name = result.iloc[0]['Nazwa stacji']
+        address = result.iloc[0]['Adres']
+        print(f'Selected station:\nStation name: {name}\nAddress: {address}\nMeasured parameter: {measure}')
     else:
         logger.error('Unexpected error: no data found')
 
@@ -51,21 +51,21 @@ def mean_and_std_generic(measure, frequency, start_date, end_date, station_code)
 
     matching_columns = [col for col in df.columns if col.split('-')[0] == station_code]
     if not matching_columns:
-        print(f"Brak danych dla stacji o kodzie: {station_code}")
+        print(f"No data for station with code:{station_code}")
         return
 
     column = matching_columns[0]
     values = df[column].dropna()
     if values.empty:
-        print("Brak dostępnych pomiarów w zadanym przedziale czasu.")
+        print("No available measurements in the specified time interval.")
         return
 
     mean = values.mean()
     std = values.std()
 
-    print(f'Statystyki dla stacji {station_code} ({column}):')
-    print(f'  Średnia: {mean:.2f} {unit}')
-    print(f'  Odchylenie standardowe: {std:.2f} {unit}')
+    print(f'Stats for station{station_code} ({column}):')
+    print(f'  Mean: {mean:.2f} {unit}')
+    print(f'  Standard deviation: {std:.2f} {unit}')
 
 
 def anomaly_detection_generic(measure, frequency, start_date, end_date, threshold):
